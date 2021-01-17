@@ -1,0 +1,18 @@
+{
+  "name": "playchess",
+  "authors": [
+    "Antoni Kiszka <antonikiszka@icloud.com>"
+  ],
+  "description": "Play chess online.",
+  "main": "index.html",
+  "license": "MIT",
+  "homepage": "kiszka.ovh/chess",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
