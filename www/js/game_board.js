@@ -27,7 +27,7 @@ function greySquare (square) {
 function onDragStart (source, piece) {
     // do not pick up pieces if the game is over
     if (game.game_over()) return false
-    
+
     // or if it's not that side's turn
     if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
 	(game.turn() === 'b' && piece.search(/^w/) !== -1)) {
@@ -83,7 +83,7 @@ function onSnapEnd () {
     sf_move_fen(game.fen()).then((stockfishMove) => {
 	var move = game.move(stockfishMove, { sloppy: true })
 	if (move === null) console.log("CRITICAL ERROR! Stockfish made an illegal move!")
-	
+
 	board.position(game.fen())
 	updateStatus()
     })
@@ -120,7 +120,7 @@ function updateStatus () {
     if (isEngineReady === false) {
 	status = "Stockfish is loading, please hold."
     }
-    
+
     $status.html(status)
     $pgn.html(game.pgn())
 }
@@ -136,5 +136,6 @@ var config = {
 }
 
 board = ChessBoard('myBoard', config)
+$(window).resize(board.resize) // auto-resize the board
 
 updateStatus()
