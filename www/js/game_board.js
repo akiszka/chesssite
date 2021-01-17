@@ -12,8 +12,20 @@ var $pgn = $('#pgn')
 
 var isEngineReady = false
 
-export function setEngineReady(val) {
+export function setEngineReady (val) {
   isEngineReady = val
+}
+
+export function tryLoadGame () {
+  if (getCookie("game") === "") return
+
+  game.load(getCookie("game"))
+  board.position(game.fen(), true)
+  updateStatus()
+}
+
+function saveGame () {
+  setCookie("game", game.fen(), 1)
 }
 
 function removeGreySquares () {
@@ -130,6 +142,8 @@ export function updateStatus () {
 
   $status.html(status)
   $pgn.html(game.pgn())
+
+  saveGame()
 }
 
 var config = {
@@ -144,5 +158,3 @@ var config = {
 
 board = ChessBoard('myBoard', config)
 $(window).resize(board.resize) // auto-resize the board
-
-updateStatus()

@@ -6,7 +6,7 @@
   <script src="bower_components/chess.js/chess.js"></script>
   <script src="bower_components/chessboardjs/chessboard.js"></script>
   <script type="module">
-    import { updateStatus, setEngineReady } from './js/game_board.js'
+    import { updateStatus, setEngineReady, tryLoadGame } from './js/game_board.js'
     import { sf_setup, sf_whenready } from './js/stockfish.js'
 
     // this waits until the sf_setup function exists and then runs some code
@@ -20,7 +20,7 @@
 
       sf_whenready().then(() => {
 	setEngineReady(true)
-//	tryLoadGame()
+	tryLoadGame()
 	updateStatus()
       })
     }, 50)
@@ -29,14 +29,14 @@
   <link rel="stylesheet" href="css/board.css">
 </head>
 <body>
-  <!-- todo: save game in cookie
+  <!--
   todo: surrender
   todo: time control?
   todo: nice pgn display (like chess.com) => probably a split function -->
   <div id="myBoard"></div>
   <div id="statusbar">
     <label>Status:</label>
-    <div id="status"></div>
+    <div id="status">Stockfish is loading, please hold.</div>
     <label>PGN:</label>
     <div id="pgn"></div>
   </div>
