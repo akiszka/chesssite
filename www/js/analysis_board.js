@@ -15,7 +15,11 @@ let isEngineReady = false
 const moves = []
 let currentMoveNumber = 0
 
-function setChessPosition (pgn) {
+export function setEngineReady (val) {
+  isEngineReady = val
+}
+
+export function setChessPosition (pgn) {
   game.load_pgn(pgn)
   board.position(game.fen(), true)
   updateStatus()
@@ -23,14 +27,14 @@ function setChessPosition (pgn) {
   currentMoveNumber = moves.length
 }
 
-function rewindBack () {
+export function rewindBack () {
   game.reset()
   board.position(game.fen(), true)
   updateStatus()
   currentMoveNumber = 0
 }
 
-function nextMove() {
+export function nextMove() {
   if (currentMoveNumber === moves.length) return // no more moves
 
   currentMoveNumber += 1
@@ -43,7 +47,7 @@ function nextMove() {
   updateStatus()
 }
 
-function previousMove() {
+export function previousMove() {
   if (currentMoveNumber === 0) return // no more moves
 
   currentMoveNumber -= 1
@@ -58,7 +62,7 @@ function previousMove() {
   updateStatus()
 }
 
-function updateStatus () {
+export function updateStatus () {
   let status = ''
 
   let moveColor = 'White'
