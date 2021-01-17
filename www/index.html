@@ -5,20 +5,24 @@
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/chess.js/chess.js"></script>
   <script src="bower_components/chessboardjs/chessboard.js"></script>
-  <script>
+  <script type="module">
+    import { updateStatus, setEngineReady } from './js/game_board.js'
+    import { sf_setup, sf_whenready } from './js/stockfish.js'
+
     // this waits until the sf_setup function exists and then runs some code
     var waitUntilStockfish = setInterval(() => {
-	try {
-	    sf_setup(false)
-	} catch (error) {
-	    return;
-	}
-	clearInterval(waitUntilStockfish)
-	
-	sf_whenready().then(() => {
-	    isEngineReady = true
-	    updateStatus()
-	})
+      try {
+	sf_setup(false)
+      } catch (error) {
+	return;
+      }
+      clearInterval(waitUntilStockfish)
+
+      sf_whenready().then(() => {
+	setEngineReady(true)
+//	tryLoadGame()
+	updateStatus()
+      })
     }, 50)
   </script>
   <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
@@ -36,6 +40,4 @@
     <label>PGN:</label>
     <div id="pgn"></div>
   </div>
-  <script src="js/stockfish.js"></script>
-  <script src="js/game_board.js"></script>
 </body>

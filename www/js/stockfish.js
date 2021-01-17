@@ -1,4 +1,11 @@
 // for UCI documentation, see https://gist.github.com/aliostad/f4470274f39d29b788c1b09519e67372
+export { sf_setup, sf_move, sf_move_fen, sf_whenready, sf_quit }
+
+let sf_setup = {}
+let sf_move = {}
+let sf_move_fen = {}
+let sf_whenready = {}
+let sf_quit = {}
 
 Stockfish().then(sf => {
   // this is crazy

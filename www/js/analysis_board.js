@@ -1,3 +1,5 @@
+import { sf_move_fen } from './stockfish.js'
+
 let board = null
 const game = new Chess()
 
