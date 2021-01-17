@@ -7,6 +7,8 @@ var $pgn = $('#pgn')
 var whiteSquareGrey = '#a9a9a9'
 var blackSquareGrey = '#696969'
 
+var isEngineReady = false;
+
 function removeGreySquares () {
     $('#myBoard .square-55d63').css('background', '')
 }
@@ -25,12 +27,15 @@ function greySquare (square) {
 function onDragStart (source, piece) {
     // do not pick up pieces if the game is over
     if (game.game_over()) return false
-
+    
     // or if it's not that side's turn
     if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
 	(game.turn() === 'b' && piece.search(/^w/) !== -1)) {
 	return false
     }
+
+    // or if Stockfish is not yet ready
+    if (isEngineReady === false) return false
 }
 
 function onDrop (source, target) {
@@ -76,7 +81,6 @@ function onSnapEnd () {
 
     // use the engine
     sf_move_fen(game.fen()).then((stockfishMove) => {
-	console.log(stockfishMove)
 	var move = game.move(stockfishMove, { sloppy: true })
 	if (move === null) console.log("CRITICAL ERROR! Stockfish made an illegal move!")
 	
@@ -111,6 +115,10 @@ function updateStatus () {
 	if (game.in_check()) {
 	    status += ', ' + moveColor + ' is in check'
 	}
+    }
+
+    if (isEngineReady === false) {
+	status = "Stockfish is loading, please hold."
     }
     
     $status.html(status)

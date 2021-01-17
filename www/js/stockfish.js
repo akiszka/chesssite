@@ -1,48 +1,74 @@
-var outsideResolve = (x) => {}
+// for UCI documentation, see https://gist.github.com/aliostad/f4470274f39d29b788c1b09519e67372
 
 Stockfish().then(sf => {
+    // this is crazy
+    // when stockfish is fed a move, it returns the best move later
+    // because of that the sf_move_fen function returns a Promise
+    // the resolve() of that Promise is added to oudsideResolve
+    // and then the promise is resolved from the Stockfish MessageListener
+    var outsideMoveResolve = []
+    var outsideReadyResolve = []
+    var isready = false;
+    
     sf.addMessageListener(line => {
-	if (line === "uciok") {
+	if (line === "readyok") {
 	    console.log("Stockfish ready")
+	    isready = true
+	    while (outsideReadyResolve.length > 0) {
+		var resolve = outsideReadyResolve.shift()
+		resolve(true)
+	    }
 	}
 
 	if(line.slice(0,8) == "bestmove") {
-	    outsideResolve(line.slice(9,13))
+	    // call the first resolve()
+	    var resolve = outsideMoveResolve.shift()
+	    resolve(line.slice(9,13))
 	}
     });
 
-    // internal function
-    const p = (message) => {
-	sf.postMessage(message);
-    };
-
     // external interface functions
+    sf_setup = (analyze) => {
+	sf.postMessage("uci\n")
+	sf.postMessage("setoption name Threads value 32\n")
+	sf.postMessage("ucinewgame\n")
+	sf.postMessage("setoption name UCI_Elo value 1350\n")
+	sf.postMessage("setoption name Threads value 32\n")
+	if (analyze === true) {
+	    sf.postMessage("setoption name UCI_AnalyseMode value true\n")
+	} else {
+	    sf.postMessage("setoption name UCI_AnalyseMode value false\n")
+	}
+	sf.postMessage("isready")
+    }
+
+    sf_whenready = () => {
+	return new Promise((resolve, reject) => {
+	    if (isready === false) // if not yet ready, just let other code handle this
+		outsideReadyResolve.push(resolve)
+	    else // if ready, return true rightaway
+		resolve(true)
+	})
+    }
+    
     sf_move = (m) => {
 	sf.postMessage("position startpos moves " + m + "\n");
 	sf.postMessage("go depth 10\n");
 	return new Promise((resolve, reject) => {
-	    outsideResolve = resolve;
+	    outsideMoveResolve.push(resolve);
 	})
     }
 
-    sf_move_fen = (f) => {
-	currentBestMove = undefined
-	
+    sf_move_fen = (f) => {	
 	sf.postMessage("position fen " + f + "\n");
-	sf.postMessage("go depth 10\n");
+	sf.postMessage("go depth 13\n");
 
 	return new Promise((resolve, reject) => {
-	    outsideResolve = resolve;
+	    outsideMoveResolve.push(resolve);
 	})
     }
     
     sf_quit = () => {
 	sf.postMessage("quit\n");
     }
-
-    // setup 
-    p("uci\n");
-    p("setoption name Threads value 32\n");
-    p("ucinewgame\n");
-    p("setoption name UCI_AnalyseMode value true\n");
 });
