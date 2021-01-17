@@ -1,4 +1,6 @@
 <head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="data:,">
   <script src="stockfish/stockfish.js"></script>
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/chess.js/chess.js"></script>
@@ -7,6 +9,13 @@
 </head>
 <body>
   <div id="myBoard" style="width: 400px"></div>
+  <label>Status:</label>
+  <div id="status"></div>
+  <label>FEN:</label>
+  <div id="fen"></div>
+  <label>PGN:</label>
+  <div id="pgn"></div>
+
   <script src="js/stockfish.js"></script>
   <script src="js/board.js"></script>
 </body>

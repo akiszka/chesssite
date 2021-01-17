@@ -1,5 +1,10 @@
 var board = null
 var game = new Chess()
+
+var $status = $('#status')
+var $fen = $('#fen')
+var $pgn = $('#pgn')
+
 var whiteSquareGrey = '#a9a9a9'
 var blackSquareGrey = '#696969'
 
@@ -41,6 +46,8 @@ function onDrop (source, target) {
 
     // illegal move
     if (move === null) return 'snapback'
+
+    updateStatus()
 }
 
 function onMouseoverSquare (square, piece) {
@@ -70,7 +77,45 @@ function onSnapEnd () {
     board.position(game.fen())
 
     // use the engine
-    sf_move_fen(game.fen()).then((stockfishMove) => { console.log(stockfishMove) })
+    sf_move_fen(game.fen()).then((stockfishMove) => {
+	console.log(stockfishMove)
+	var move = game.move(stockfishMove, { sloppy: true })
+	if (move === null) console.log("CRITICAL ERROR! Stockfish made an illegal move!")
+	board.position(game.fen())
+    })
+}
+
+function updateStatus () {
+    var status = ''
+
+    var moveColor = 'White'
+    if (game.turn() === 'b') {
+	moveColor = 'Black'
+    }
+
+    // checkmate?
+    if (game.in_checkmate()) {
+	status = 'Game over, ' + moveColor + ' is in checkmate.'
+    }
+
+    // draw?
+    else if (game.in_draw()) {
+	status = 'Game over, drawn position'
+    }
+
+    // game still on
+    else {
+	status = moveColor + ' to move'
+
+	// check?
+	if (game.in_check()) {
+	    status += ', ' + moveColor + ' is in check'
+	}
+    }
+    
+    $status.html(status)
+    $fen.html(game.fen())
+    $pgn.html(game.pgn())
 }
 
 var config = {
@@ -82,4 +127,7 @@ var config = {
     onMouseoverSquare: onMouseoverSquare,
     onSnapEnd: onSnapEnd
 }
+
 board = ChessBoard('myBoard', config)
+
+updateStatus()
