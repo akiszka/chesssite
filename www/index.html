@@ -5,15 +5,17 @@
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/chess.js/chess.js"></script>
   <script src="bower_components/chessboardjs/chessboard.js"></script>
-  <link rel="stylesheet" href="css/chessboard-1.0.0.min.css"/>
+  <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
+  <link rel="stylesheet" href="css/board.css">
 </head>
 <body>
-  <div id="myBoard" style="width: 400px"></div>
-  <label>Status:</label>
-  <div id="status"></div>
-  <label>PGN:</label>
-  <div id="pgn"></div>
-
+  <div id="myBoard"></div>
+  <div id="statusbar">
+    <label>Status:</label>
+    <div id="status"></div>
+    <label>PGN:</label>
+    <div id="pgn"></div>
+  </div>
   <script src="js/stockfish.js"></script>
   <script src="js/board.js"></script>
 </body>
