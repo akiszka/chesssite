@@ -16,7 +16,7 @@ body {
 	"a b c"
 }
 
-#keys {
+#left {
     grid-area: a;
     margin-left: 3vw;
 }
@@ -41,4 +41,33 @@ label {
 
 .highlight {
     box-shadow: inset 0 0 3px 3px yellow;
+}
+
+button {
+    display: block;
+    margin: 0 auto;
+
+    cursor: pointer;
+    outline: none;
+    border: none;
+
+    width: 15vw;
+    height: 100px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    background-size: 100% 100%;
+
+    font-size: 1.5rem;
+    font-weight: 600;
+
+    box-shadow: 0 0 0 7px rgba(0,0,0,0.2) inset;
+
+    background: white;
+
+    transition: background 1s, color 1s;
+}
+
+button:hover {
+    background: red;
+    color: white;
 }

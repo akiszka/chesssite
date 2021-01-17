@@ -6,7 +6,7 @@
   <script src="bower_components/chess.js/chess.js"></script>
   <script src="bower_components/chessboardjs/chessboard.js"></script>
   <script type="module">
-    import { updateStatus, setEngineReady, tryLoadGame } from './js/game_board.js'
+    import { updateStatus, setEngineReady, tryLoadGame, resetGame } from './js/game_board.js'
     import { sf_setup, sf_whenready } from './js/stockfish.js'
 
     // this waits until the sf_setup function exists and then runs some code
@@ -24,6 +24,14 @@
 	updateStatus()
       })
     }, 50)
+
+    $('#newgame').click(() => {
+      if ($('#newgame').html() === "Really?") {
+	resetGame()
+      } else {
+	$('#newgame').html("Really?")
+      }
+    })
   </script>
   <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
   <link rel="stylesheet" href="css/board.css">
@@ -33,6 +41,9 @@
   todo: surrender
   todo: time control?
   todo: nice pgn display (like chess.com) => probably a split function -->
+  <div id="left">
+    <button id="newgame">New game</button>
+  </div>
   <div id="myBoard"></div>
   <div id="statusbar">
     <label>Status:</label>

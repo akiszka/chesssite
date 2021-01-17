@@ -24,6 +24,11 @@ export function tryLoadGame () {
   updateStatus()
 }
 
+export function resetGame() {
+  setCookie("game", "", 1)
+  location.reload()
+}
+
 function saveGame () {
   setCookie("game", game.fen(), 1)
 }
