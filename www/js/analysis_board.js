@@ -12,7 +12,7 @@ const $engine = $('#engine')
 
 let isEngineReady = false
 
-const moves = []
+let moves = []
 let currentMoveNumber = 0
 
 export function setEngineReady (val) {
@@ -21,8 +21,9 @@ export function setEngineReady (val) {
 
 export function setChessPosition (pgn) {
   game.load_pgn(pgn)
-  board.position(game.fen(), true)
+  console.log(board.position(game.fen(), true))
   updateStatus()
+  moves = []
   game.history({ verbose: true }).forEach((move) => moves.push(move.from+move.to))
   currentMoveNumber = moves.length
 }
@@ -34,8 +35,18 @@ export function rewindBack () {
   currentMoveNumber = 0
 }
 
+export function fastForward () {
+  game.reset()
+  moves.forEach((currentMove) => {
+    game.move(currentMove, { sloppy: true })
+  })
+  board.position(game.fen(), true)
+  updateStatus()
+  currentMoveNumber = moves.length
+}
+
 export function nextMove() {
-  if (currentMoveNumber === moves.length) return // no more moves
+  if (currentMoveNumber >= moves.length) return // no more moves
 
   currentMoveNumber += 1
 
@@ -48,7 +59,7 @@ export function nextMove() {
 }
 
 export function previousMove() {
-  if (currentMoveNumber === 0) return // no more moves
+  if (currentMoveNumber <= 0) return // no more moves
 
   currentMoveNumber -= 1
 
