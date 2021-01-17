@@ -1,37 +1,12 @@
-<script src="stockfish.js"></script>
-<script>
-  const { Chess } = require('./chess.js');
-  chess = new Chess();
-  
-  Stockfish().then(sf => {
-      sf.addMessageListener(line => {
-	  console.log(line);
-      });
-
-      // internal function
-      const p = (message) => {
-	  sf.postMessage(message);
-      };
-
-      // external interface functions
-      start = () => {
-	  sf.postMessage("position startpos\n");
-      }
-      
-      move = (m) => {
-	  sf.postMessage("position startpos moves " + m + "\n");
-	  sf.postMessage("go nodes 1000\n");
-      }
-
-      quit = () => {
-	  sf.postMessage("quit\n");
-      }
-
-      // setup
-      
-      p("uci\n");
-      p("setoption name Threads value 32\n");
-      p("ucinewgame\n");
-      p("setoption name UCI_AnalyseMode value true\n");
-  });
-</script>
+<head>
+  <script src="stockfish/stockfish.js"></script>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/chess.js/chess.js"></script>
+  <script src="bower_components/chessboardjs/chessboard.js"></script>
+  <link rel="stylesheet" href="css/chessboard-1.0.0.min.css"/>
+</head>
+<body>
+  <div id="myBoard" style="width: 400px"></div>
+  <script src="js/stockfish.js"></script>
+  <script src="js/board.js"></script>
+</body>
